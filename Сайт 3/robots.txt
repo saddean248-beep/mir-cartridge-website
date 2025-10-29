@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /cgi-bin/
+
+# Скорость сканирования (1 запрос в секунду)
+Crawl-delay: 1
+
+# Указание на карту сайта
+Sitemap: https://mircartridge.ru/sitemap.xml

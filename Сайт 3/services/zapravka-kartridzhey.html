@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заправка картриджей - Мир Картриджей</title>
+    <meta name="robots" content="index, follow">
+    <meta name="copyright" content="Мир Картриджей">
+    <meta name="author" content="Мир Картриджей">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Шапка (как на главной) -->
+    <header>
+        <div class="container header-container">
+            <a href="../index.html" class="logo">
+                <i class="fas fa-print"></i>
+                <span>Мир Картриджей</span>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="../index.html#services"><i class="fas fa-fill-drip"></i> Услуги</a></li>
+                    <li><a href="../index.html#articles"><i class="fas fa-newspaper"></i> Статьи</a></li>
+                    <li><a href="../index.html#contacts"><i class="fas fa-address-card"></i> Контакты</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-contacts">
+                <div class="contact-phones">
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <a href="tel:+78124485832" class="contact-link">+7 (812) 448-58-32</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📞</span>
+                        <a href="tel:+79110102301" class="contact-link">+7 (911) 010-23-01</a>
+                    </div>
+                </div>
+                <div class="city-item">
+                    <span class="contact-icon"><i class="fas fa-location-dot"></i></span>
+                    <span class="contact-text">Санкт-Петербург</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Мобильные контакты -->
+    <div class="mobile-contacts">
+        <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <a href="tel:+78124485832" class="contact-link">+7 (812) 448-58-32</a>
+        </div>
+        <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <a href="tel:+79110102301" class="contact-link">+7 (911) 010-23-01</a>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <section class="refill-service">
+        <div class="container">
+            <h1 class="section-title">Заправка картриджей</h1>
+
+<!-- Блок помощи ДО поиска -->
+        <div class="help-notice">
+            <div class="help-content">
+                <i class="fas fa-headset"></i>
+                <div>
+                    <h3>Не нашли нужную модель?</h3>
+                    <p>Свяжитесь с нами по номеру
+                    <a href="tel:+79110102301" class="phone-link">+7 911 010-23-01</a> 
+               и наш специалист подберет решение для вашего устройства.
+            </p>
+                </div>
+            </div>
+        </div>
+            
+            <!-- Простой поиск -->
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Поиск по модели картриджа...">
+            </div>
+
+            <!-- Список картриджей -->
+            <div class="refill-table" id="refillTable">
+                <!-- Данные через JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Кнопки как в статьях -->
+    <section class="article-actions">
+        <div class="container">
+            <div class="action-buttons">
+                <a href="../index.html#services" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Назад к услугам
+                </a>
+                <div class="contact-buttons">
+                    <button class="btn-whatsapp" onclick="openWhatsApp()">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="btn-telegram" onclick="openTelegram()">
+                        <i class="fab fa-telegram"></i> Telegram
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал -->
+    <footer class="footer">
+    <div class="container">
+        <p>© 2016-2025 Мир Картриджей. Сервисный центр по обслуживанию оргтехники.</p>
+        <div class="legal-notice">
+            <small>Все права защищены. Копирование материалов сайта без разрешения запрещено.</small>
+        </div>
+    </div>
+</footer>
+
+    <script src="../service-script.js"></script>
+
+<!-- Кнопка "Наверх" -->
+<button id="scrollToTop" class="scroll-to-top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+</body>
+</html>
