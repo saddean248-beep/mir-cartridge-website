@@ -1,10 +1,10 @@
 // service-script.js - Универсальный скрипт для всех услуг
 
-const SHEET_ID = '1SjNsRu6gIXA8f2CWpm_lQN5RS-m_cmQVJsfrMPUmZF0';
-
 // Определяем тип услуги по URL страницы
 function getServiceType() {
     const path = window.location.pathname;
+    console.log('Текущий путь:', path); // ДЛЯ ОТЛАДКИ
+    
     if (path.includes('zapravka-kartridzhey')) {
         return { sheet: 'Лист1', service: 'Заправка', message: 'заправки картриджей' };
     } else if (path.includes('obmen-kartridzhey')) {
@@ -19,20 +19,24 @@ function getServiceType() {
 
 let cartridgesData = [];
 
-// Загрузка данных из Google Sheets через нашу серверную функцию
+// ЗАГРУЗКА ДАННЫХ ИЗ GOOGLE SHEETS
 async function loadDataFromSheets() {
     const serviceInfo = getServiceType();
+    console.log('Загружаем данные для услуги:', serviceInfo.service); // ДЛЯ ОТЛАДКИ
     
     try {
-        // Используем нашу серверную функцию вместо прямого доступа к Google Sheets
+        // Пытаемся загрузить с Netlify функции
         const serviceParam = serviceInfo.service.toLowerCase();
         const response = await fetch(`/.netlify/functions/sheets?service=${serviceParam}`);
+        
+        console.log('Ответ от функции:', response); // ДЛЯ ОТЛАДКИ
         
         if (!response.ok) {
             throw new Error(`Ошибка API: ${response.status}`);
         }
         
         const data = await response.json();
+        console.log('Получены данные:', data); // ДЛЯ ОТЛАДКИ
         
         cartridgesData = [];
         
@@ -42,26 +46,66 @@ async function loadDataFromSheets() {
                 cartridgesData.push({
                     brand: item.brand.toLowerCase(),
                     model: item.model,
-                    price: item.price,
+                    price: item.price + ' руб', // ДОБАВЛЯЕМ "руб"
                     service: item.service
                 });
             }
         });
         
         console.log(`Данные ${serviceInfo.service.toLowerCase()} загружены:`, cartridgesData.length, 'позиций');
-        displayCartridges();
+        
+        // Если данных нет, показываем тестовые
+        if (cartridgesData.length === 0) {
+            showTestData(serviceInfo.service);
+        } else {
+            displayCartridges();
+        }
         
     } catch (error) {
         console.error('Ошибка загрузки данных:', error);
-        document.getElementById('refillTable').innerHTML = 
-            '<div class="no-results">Ошибка загрузки данных. Попробуйте позже.</div>';
+        // Показываем тестовые данные при ошибке
+        showTestData(serviceInfo.service);
     }
+}
+
+// ТЕСТОВЫЕ ДАННЫЕ ЕСЛИ ОСНОВНАЯ ЗАГРУЗКА НЕ РАБОТАЕТ
+function showTestData(serviceType) {
+    console.log('Показываем тестовые данные для:', serviceType);
+    
+    if (serviceType === 'Заправка') {
+        cartridgesData = [
+            { brand: "xerox", model: "Xerox 106R01159", price: "850 руб", service: "Заправка" },
+            { brand: "hp", model: "HP CF400X", price: "1200 руб", service: "Заправка" },
+            { brand: "canon", model: "Canon 725", price: "950 руб", service: "Заправка" },
+            { brand: "samsung", model: "Samsung MLT-D101S", price: "800 руб", service: "Заправка" },
+            { brand: "brother", model: "Brother TN-2312", price: "750 руб", service: "Заправка" }
+        ];
+    } else if (serviceType === 'Обмен') {
+        cartridgesData = [
+            { brand: "xerox", model: "Xerox 106R01159", price: "1000 руб", service: "Обмен" },
+            { brand: "hp", model: "HP CF400X", price: "1500 руб", service: "Обмен" },
+            { brand: "canon", model: "Canon 725", price: "1100 руб", service: "Обмен" }
+        ];
+    } else {
+        cartridgesData = [
+            { brand: "test", model: "Тестовый картридж", price: "1000 руб", service: serviceType }
+        ];
+    }
+    
+    displayCartridges();
 }
 
 // Функции отображения
 function displayCartridges(filteredData = cartridgesData) {
+    console.log('Отображаем данные:', filteredData); // ДЛЯ ОТЛАДКИ
+    
     const table = document.getElementById('refillTable');
     
+    if (!table) {
+        console.error('Элемент refillTable не найден!');
+        return;
+    }
+
     if (filteredData.length === 0) {
         table.innerHTML = '<div class="no-results">Ничего не найдено</div>';
         return;
@@ -89,7 +133,7 @@ function displayCartridges(filteredData = cartridgesData) {
             html += `
                 <div class="cartridge-item">
                     <span class="cartridge-model">${cartridge.model}</span>
-                    <span class="cartridge-price">${cartridge.price} руб</span>
+                    <span class="cartridge-price">${cartridge.price}</span>
                 </div>
             `;
         });
@@ -101,12 +145,14 @@ function displayCartridges(filteredData = cartridgesData) {
     });
     
     table.innerHTML = html;
+    console.log('HTML сгенерирован'); // ДЛЯ ОТЛАДКИ
 }
 
 function getBrandName(brandKey) {
     const brandNames = {
         'xerox': 'Xerox', 'canon': 'Canon', 'hp': 'HP', 'samsung': 'Samsung',
-        'pantum': 'Pantum', 'ricoh': 'Ricoh', 'kyocera': 'Kyocera', 'brother': 'Brother'
+        'pantum': 'Pantum', 'ricoh': 'Ricoh', 'kyocera': 'Kyocera', 'brother': 'Brother',
+        'test': 'Тестовые'
     };
     return brandNames[brandKey] || brandKey;
 }
@@ -164,7 +210,15 @@ function initScrollToTop() {
 
 // Инициализация
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Страница загружена, начинаем загрузку данных...'); // ДЛЯ ОТЛАДКИ
     loadDataFromSheets();
-    document.getElementById('searchInput').addEventListener('input', searchCartridges);
+    
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', searchCartridges);
+    } else {
+        console.error('Поле поиска не найдено!');
+    }
+    
     initScrollToTop();
 });
